@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#090b0e">
+
+<title>BattleForge V1</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#090b0e;
+  --panel:#12161b;
+  --panel2:#181d23;
+  --line:#303740;
+  --text:#f4f1e8;
+  --muted:#9ba3ad;
+  --fire:#e76f2e;
+  --gold:#d6a84b;
+  --green:#64b77a;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at top,#20252b 0,#0d1014 32%,#090b0e 70%);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+main{
+  max-width:600px;
+  margin:auto;
+  padding:20px 16px 60px;
+}
+
+.hero{
+  text-align:center;
+  padding:26px 8px 18px;
+}
+
+.logo{
+  font-size:48px;
+  margin-bottom:4px;
+}
+
+h1{
+  margin:0;
+  font-size:38px;
+  letter-spacing:2px;
+}
+
+.version{
+  color:var(--fire);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:2px;
+}
+
+.tagline{
+  color:var(--muted);
+  margin-top:9px;
+}
+
+.card{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:17px;
+  margin:14px 0;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.card h2{
+  margin:0 0 14px;
+  font-size:20px;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  letter-spacing:.8px;
+  margin:13px 0 6px;
+  text-transform:uppercase;
+}
+
+select,input{
+  width:100%;
+  border:1px solid #3a424c;
+  background:#0c1014;
+  color:white;
+  border-radius:12px;
+  padding:13px;
+  font-size:16px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.force{
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+  background:#0d1115;
+}
+
+.forceName{
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.forceEra{
+  color:var(--gold);
+  font-size:12px;
+  margin-bottom:12px;
+}
+
+.stat{
+  margin:8px 0;
+}
+
+.statLine{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.bar{
+  height:6px;
+  border-radius:10px;
+  background:#262c33;
+  overflow:hidden;
+}
+
+.fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--fire));
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  margin-top:14px;
+  background:linear-gradient(135deg,#c95121,#f08a3c);
+  color:white;
+  font-weight:900;
+  font-size:17px;
+  letter-spacing:.5px;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:#22282f;
+  border:1px solid #3b434d;
+}
+
+.result{
+  display:none;
+}
+
+.winner{
+  text-align:center;
+  font-size:27px;
+  font-weight:900;
+  color:var(--gold);
+  margin:8px 0 4px;
+}
+
+.confidence{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:18px;
+}
+
+.probRow{
+  margin:14px 0;
+}
+
+.probTop{
+  display:flex;
+  justify-content:space-between;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.probBar{
+  height:13px;
+  border-radius:20px;
+  background:#252b32;
+  overflow:hidden;
+}
+
+.probFill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--fire));
+}
+
+.factor{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid #2c333a;
+  padding:10px 0;
+}
+
+.factor:last-child{
+  border-bottom:0;
+}
+
+.archiveItem{
+  border:1px solid #303740;
+  background:#0c1014;
+  border-radius:12px;
+  padding:12px;
+  margin:9px 0;
+}
+
+.archiveWinner{
+  color:var(--gold);
+  font-weight:900;
+}
+
+.small{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.empty{
+  color:var(--muted);
+  text-align:center;
+  padding:18px;
+}
+
+.footer{
+  text-align:center;
+  color:#6f7882;
+  font-size:11px;
+  padding:25px 10px;
+}
+
+.badge{
+  display:inline-block;
+  background:#2b2119;
+  color:#efb56f;
+  border:1px solid #604124;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:800;
+  margin-top:6px;
+}
+
+@media(max-width:430px){
+  h1{font-size:32px}
+  .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<section class="hero">
+  <div class="logo">⚔️</div>
+  <h1>BATTLEFORGE</h1>
+  <div class="version">VERSION 1.0</div>
+  <div class="tagline">Change history. See what happens.</div>
+  <div class="badge">HISTORICAL SIMULATION ENGINE</div>
+</section>
+
+<section class="card">
+<h2>⚒️ Forge a Battle</h2>
+
+<label>Force A</label>
+<select id="forceA"></select>
+
+<label>Force B</label>
+<select id="forceB"></select>
+
+<label>Terrain</label>
+<select id="terrain">
+<option value="plains">Open Plains</option>
+<option value="forest">Forest</option>
+<option value="mountains">Mountains</option>
+<option value="desert">Desert</option>
+<option value="river">River Crossing</option>
+<option value="fortified">Fortified Position</option>
+</select>
+
+<div class="grid2">
+
+<div>
+<label>Force A Condition</label>
+<select id="conditionA">
+<option value="fresh">Fresh</option>
+<option value="normal" selected>Normal</option>
+<option value="tired">Tired</option>
+<option value="exhausted">Exhausted</option>
+</select>
+</div>
+
+<div>
+<label>Force B Condition</label>
+<select id="conditionB">
+<option value="fresh">Fresh</option>
+<option value="normal" selected>Normal</option>
+<option value="tired">Tired</option>
+<option value="exhausted">Exhausted</option>
+</select>
+</div>
+
+</div>
+
+<label>Simulation Runs</label>
+<select id="runs">
+<option value="100">100</option>
+<option value="500">500</option>
+<option value="1000" selected>1,000</option>
+<option value="5000">5,000</option>
+</select>
+
+<button onclick="forgeBattle()">⚔️ FORGE BATTLE</button>
+</section>
+
+<section class="card">
+<h2>🛡️ Force Comparison</h2>
+<div class="grid2">
+<div id="profileA"></div>
+<div id="profileB"></div>
+</div>
+</section>
+
+<section id="result" class="card result">
+
+<h2>🔥 BattleForge Result</h2>
+
+<div id="winner" class="winner"></div>
+<div id="confidence" class="confidence"></div>
+
+<div id="probabilities"></div>
+
+<h2 style="margin-top:24px">⚖️ Decisive Factors</h2>
+<div id="factors"></div>
+
+<div id="report" class="small" style="margin-top:18px"></div>
+
+<button onclick="saveBattle()">💾 SAVE TO FORGE ARCHIVE</button>
+
+</section>
+
+<section class="card">
+
+<h2>📜 Forge Archive</h2>
+
+<div id="archive"></div>
+
+<button class="secondary" onclick="clearArchive()">
+Clear Archive
+</button>
+
+</section>
+
+<section class="card">
+
+<h2>🏛️ About V1</h2>
+
+<p class="small">
+BattleForge V1 is an experimental historical probability simulator.
+Force ratings are simplified modeling values rather than claims of exact
+historical measurement.
+</p>
+
+<p class="small">
+The engine compares force characteristics, terrain compatibility,
+condition and controlled randomness across repeated simulations.
+</p>
+
+<p class="small">
+Future versions can add historical battles, commanders, additional eras,
+campaigns and deeper historical datasets.
+</p>
+
+</section>
+
+<div class="footer">
+BATTLEFORGE V1 • HISTORICAL SIMULATION PROJECT
+</div>
+
+</main>
+
+<script>
+
+const stats = [
+"manpower",
+"training",
+"leadership",
+"morale",
+"equipment",
+"mobility",
+"logistics",
+"cohesion",
+"experience"
+];
+
+const labels = {
+manpower:"Manpower",
+training:"Training",
+leadership:"Leadership",
+morale:"Morale",
+equipment:"Equipment",
+mobility:"Mobility",
+logistics:"Logistics",
+cohesion:"Cohesion",
+experience:"Experience"
+};
+
+const forces = {
+
+rome:{
+name:"Roman Republic",
+era:"Classical Antiquity",
+manpower:92,
+training:88,
+leadership:82,
+morale:88,
+equipment:86,
+mobility:72,
+logistics:90,
+cohesion:91,
+experience:90
+},
+
+carthage:{
+name:"Carthage",
+era:"Classical Antiquity",
+manpower:84,
+training:85,
+leadership:94,
+morale:85,
+equipment:84,
+mobility:92,
+logistics:83,
+cohesion:84,
+experience:92
+},
+
+sparta:{
+name:"Sparta",
+era:"Classical Greece",
+manpower:66,
+training:98,
+leadership:88,
+morale:97,
+equipment:88,
+mobility:71,
+logistics:68,
+cohesion:98,
+experience:94
+},
+
+athens:{
+name:"Athens",
+era:"Classical Greece",
+manpower:78,
+training:82,
+leadership:83,
+morale:82,
+equipment:85,
+mobility:78,
+logistics:86,
+cohesion:82,
+experience:84
+},
+
+macedon:{
+name:"Macedon",
+era:"Hellenistic",
+manpower:87,
+training:94,
+leadership:97,
+morale:92,
+equipment:93,
+mobility:91,
+logistics:85,
+cohesion:94,
+experience:95
+},
+
+persia:{
+name:"Achaemenid Persia",
+era:"Classical Antiquity",
+manpower:98,
+training:78,
+leadership:82,
+morale:81,
+equipment:84,
+mobility:89,
+logistics:88,
+cohesion:75,
+experience:86
+},
+
+seleucid:{
+name:"Seleucid Empire",
+era:"Hellenistic",
+manpower:88,
+training:86,
+leadership:83,
+morale:82,
+equipment:91,
+mobility:88,
+logistics:81,
+cohesion:81,
+experience:88
+},
+
+ptolemy:{
+name:"Ptolemaic Egypt",
+era:"Hellenistic",
+manpower:84,
+training:83,
+leadership:80,
+morale:80,
+equipment:89,
+mobility:79,
+logistics:88,
+cohesion:82,
+experience:85
+},
+
+parthia:{
+name:"Parthian Empire",
+era:"Classical Antiquity",
+manpower:76,
+training:88,
+leadership:86,
+morale:87,
+equipment:87,
+mobility:98,
+logistics:80,
+cohesion:82,
+experience:92
+},
+
+numidia:{
+name:"Numidia",
+era:"Classical Antiquity",
+manpower:68,
+training:82,
+leadership:84,
+morale:86,
+equipment:72,
+mobility:99,
+logistics:74,
+cohesion:80,
+experience:88
+},
+
+gauls:{
+name:"Gaulish Confederations",
+era:"Classical Antiquity",
+manpower:88,
+training:75,
+leadership:76,
+morale:90,
+equipment:79,
+mobility:82,
+logistics:68,
+cohesion:72,
+experience:82
+},
+
+han:{
+name:"Han Dynasty",
+era:"Classical East Asia",
+manpower:96,
+training:88,
+leadership:87,
+morale:86,
+equipment:91,
+mobility:88,
+logistics:95,
+cohesion:90,
+experience:91
+}
+
+};
+
+const terrainEffects = {
+
+plains:{
+mobility:1.08
+},
+
+forest:{
+mobility:.92,
+cohesion:.96
+},
+
+mountains:{
+manpower:.94,
+mobility:.88,
+training:1.05
+},
+
+desert:{
+logistics:.88,
+experience:1.04
+},
+
+river:{
+mobility:.87,
+cohesion:.91,
+leadership:1.04
+},
+
+fortified:{
+manpower:.94,
+equipment:1.04,
+cohesion:1.07
+}
+
+};
+
+const conditions = {
+fresh:1.05,
+normal:1,
+tired:.94,
+exhausted:.86
+};
+
+let lastBattle = null;
+
+function setup(){
+
+const a=document.getElementById("forceA");
+const b=document.getElementById("forceB");
+
+Object.keys(forces).forEach(key=>{
+
+const o1=document.createElement("option");
+o1.value=key;
+o1.textContent=forces[key].name;
+a.appendChild(o1);
+
+const o2=document.createElement("option");
+o2.value=key;
+o2.textContent=forces[key].name;
+b.appendChild(o2);
+
+});
+
+a.value="rome";
+b.value="carthage";
+
+a.onchange=renderProfiles;
+b.onchange=renderProfiles;
+
+renderProfiles();
+renderArchive();
+
+}
+
+function renderProfiles(){
+
+renderProfile(
+document.getElementById("profileA"),
+forces[document.getElementById("forceA").value]
+);
+
+renderProfile(
+document.getElementById("profileB"),
+forces[document.getElementById("forceB").value]
+);
+
+}
+
+function renderProfile(el,f){
+
+let html=
+'<div class="force">'+
+'<div class="forceName">'+f.name+'</div>'+
+'<div class="forceEra">'+f.era+'</div>';
+
+stats.forEach(s=>{
+
+html+=
+'<div class="stat">'+
+'<div class="statLine">'+
+'<span>'+labels[s]+'</span>'+
+'<span>'+f[s]+'</span>'+
+'</div>'+
+'<div class="bar">'+
+'<div class="fill" style="width:'+f[s]+'%"></div>'+
+'</div>'+
+'</div>';
+
+});
+
+html+='</div>';
+
+el.innerHTML=html;
+
+}
+
+function adjustedScore(force,terrain,condition){
+
+let total=0;
+
+stats.forEach(s=>{
+
+let value=force[s];
+
+if(terrainEffects[terrain][s]){
+value*=terrainEffects[terrain][s];
+}
+
+value*=conditions[condition];
+
+total+=value;
+
+});
+
+return total/stats.length;
+
+}
+
+function forgeBattle(){
+
+const keyA=document.getElementById("forceA").value;
+const keyB=document.getElementById("forceB").value;
+
+if(keyA===keyB){
+alert("Choose two different forces.");
+return;
+}
+
+const terrain=document.getElementById("terrain").value;
+const conditionA=document.getElementById("conditionA").value;
+const conditionB=document.getElementById("conditionB").value;
+const runs=parseInt(document.getElementById("runs").value);
+
+const A=forces[keyA];
+const B=forces[keyB];
+
+const baseA=adjustedScore(A,terrain,conditionA);
+const baseB=adjustedScore(B,terrain,conditionB);
+
+let winsA=0;
+let winsB=0;
+
+for(let i=0;i<runs;i++){
+
+const uncertaintyA=.88+Math.random()*.24;
+const uncertaintyB=.88+Math.random()*.24;
+
+const scoreA=baseA*uncertaintyA;
+const scoreB=baseB*uncertaintyB;
+
+if(scoreA>scoreB){
+winsA++;
+}else{
+winsB++;
+}
+
+}
+
+const probA=(winsA/runs)*100;
+const probB=(winsB/runs)*100;
+
+const winner=probA>probB?A:B;
+const winningProb=Math.max(probA,probB);
+
+let confidence="LOW";
+
+if(winningProb>=70) confidence="HIGH";
+else if(winningProb>=60) confidence="MODERATE";
+
+const factorData=stats.map(s=>({
+stat:s,
+diff:A[s]-B[s]
+}))
+.sort((x,y)=>Math.abs(y.diff)-Math.abs(x.diff))
+.slice(0,4);
+
+lastBattle={
+timestamp:new Date().toLocaleString(),
+forceA:A.name,
+forceB:B.name,
+terrain,
+conditionA,
+conditionB,
+runs,
+probA:probA.toFixed(1),
+probB:probB.toFixed(1),
+winner:winner.name,
+confidence
+};
+
+document.getElementById("winner").innerHTML=
+"🏆 "+winner.name;
+
+document.getElementById("confidence").innerHTML=
+confidence+" CONFIDENCE • "+runs.toLocaleString()+" SIMULATIONS";
+
+document.getElementById("probabilities").innerHTML=
+
+probabilityHTML(A.name,probA)+
+probabilityHTML(B.name,probB);
+
+let factorHTML="";
+
+factorData.forEach(f=>{
+
+const advantage=
+f.diff>0?A.name:B.name;
+
+factorHTML+=
+'<div class="factor">'+
+'<span>'+labels[f.stat]+'</span>'+
+'<strong>'+advantage+'</strong>'+
+'</div>';
+
+});
+
+document.getElementById("factors").innerHTML=factorHTML;
+
+document.getElementById("report").innerHTML=
+"<strong>Battle Report:</strong> Under the selected assumptions, "+
+winner.name+
+" won approximately "+
+winningProb.toFixed(1)+
+"% of BattleForge simulations. Results represent simplified historical modeling and uncertainty rather than a claim that a historical outcome was predetermined.";
+
+document.getElementById("result").style.display="block";
+
+document.getElementById("result").scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+function probabilityHTML(name,p){
+
+return `
+<div class="probRow">
+<div class="probTop">
+<span>${name}</span>
+<span>${p.toFixed(1)}%</span>
+</div>
+<div class="probBar">
+<div class="probFill" style="width:${p}%"></div>
+</div>
+</div>
+`;
+
+}
+
+function saveBattle(){
+
+if(!lastBattle){
+alert("Forge a battle first.");
+return;
+}
+
+let archive=
+JSON.parse(localStorage.getItem("battleForgeArchive")||"[]");
+
+archive.unshift(lastBattle);
+
+archive=archive.slice(0,50);
+
+localStorage.setItem(
+"battleForgeArchive",
+JSON.stringify(archive)
+);
+
+renderArchive();
+
+alert("Battle saved to Forge Archive.");
+
+}
+
+function renderArchive(){
+
+const el=document.getElementById("archive");
+
+const archive=
+JSON.parse(localStorage.getItem("battleForgeArchive")||"[]");
+
+if(!archive.length){
+
+el.innerHTML=
+'<div class="empty">No battles forged yet.</div>';
+
+return;
+}
+
+el.innerHTML=archive.map(b=>`
+
+<div class="archiveItem">
+
+<div class="archiveWinner">
+🏆 ${b.winner}
+</div>
+
+<div>
+${b.forceA} ${b.probA}% vs ${b.forceB} ${b.probB}%
+</div>
+
+<div class="small">
+${b.runs.toLocaleString()} simulations •
+${b.confidence} confidence
+</div>
+
+<div class="small">
+Terrain: ${formatTerrain(b.terrain)}
+</div>
+
+<div class="small">
+${b.timestamp}
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+function clearArchive(){
+
+if(!confirm("Clear the entire Forge Archive?")){
+return;
+}
+
+localStorage.removeItem("battleForgeArchive");
+
+renderArchive();
+
+}
+
+function formatTerrain(t){
+
+const names={
+plains:"Open Plains",
+forest:"Forest",
+mountains:"Mountains",
+desert:"Desert",
+river:"River Crossing",
+fortified:"Fortified Position"
+};
+
+return names[t]||t;
+
+}
+
+setup();
+
+</script>
+
+</body>
+</html>
